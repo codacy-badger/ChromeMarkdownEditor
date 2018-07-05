@@ -2,7 +2,21 @@ window.onload = function () {
 	document.getElementById('Test').addEventListener('click', TestSaveSync);
 }
 
-
+function TestSaveSync()
+{
+	var set = new Setting(true);
+	console.log("Test save sync!");
+	set.saveSetting("Test", "TestSave")
+	set.loadSetting("Test");
+	
+	var value = set.loadSetting("Test");
+	var textbox = document.getElementById('TextBox');
+	console.log("Loaded value: " + value);
+	var textNode = document.createTextNode(value); 
+	textbox.appendChild(textNode);   
+	
+	console.log("Test save sync end!");
+}
 
 class Setting 
 {
@@ -11,106 +25,97 @@ class Setting
 		this._debug = debug;
 	}
 	
-	function saveSetting(key, value)
+	saveSetting(key, value)
 	{
 		if (navigator.onLine)
 		{
-			if (!loadLocal("Synced"))
+			if (!this.loadLocal("Synced"))
 			{
-				SyncAll();
+				this.SyncAll();
 			}
-			saveOnline(key, value);
-			saveLocal("Synced", true);
+			this.saveOnline(key, value);
+			this.saveLocal("Synced", true);
 		}
 		else {
-			saveLocal(key, value);
-			saveLocal("Synced", false);
+			this.saveLocal(key, value);
+			this.saveLocal("Synced", false);
 		}
 	}
 	
-	function saveOnline(key, value)
+	saveOnline(key, value)
 	{
+		var debug = this._debug
 		chrome.storage.sync.set({key: value}, function() {
-			if (this._debug)
+			if (debug)
 			{
 				console.log('Value '+key+' is set globally to ' + value);
 			}
 		});
 		
-		saveLocal(key, value);
+		this.saveLocal(key, value);
 	}
-}
-  
-  function TestSaveSync()
-  {
-	console.log("Test save sync!");
-	saveSetting("Test", "TestSave")
-	loadSettings("Test");
-	console.log("Test save sync end!");
-  }
-
-function saveSetting(key, value)
-{
-	if (navigator.onLine)
-	{
-		if (!loadLocal("Synced"))
-		{
-			SyncAll();
-		}
-		saveOnline(key, value);
-		saveLocal("Synced", true);
-	}else{
-		saveLocal(key, value);
-		saveLocal("Synced", false);
-	}
-}
-
-function saveOnline(key, value)
-{
-	chrome.storage.sync.set({key: value}, function() {
-		console.log('Value '+key+' is set globally to ' + value);
-	});
 	
-	saveLocal(key, value);
-}
-
-function saveLocal(key, value)
-{
-	chrome.storage.local.set({key: value}, function() {
-        console.log('Value  '+key+' is set locally to ' + value);
-    });
-}
-
-function loadSettings(key)
-{
-	if (navigator.onLine)
+	saveLocal(key, value)
 	{
-		if (!loadLocal("Synced"))
-		{
-			SyncAll();
-		}
-		return loadOnline(key);
-	}else{
-		return loadLocal(key);
+		var debug = this._debug
+		chrome.storage.local.set({key: value}, function() {
+			if (debug)
+			{
+				console.log('Value  '+key+' is set locally to ' + value);
+			}
+		});
 	}
-}
+	
+	loadSetting(key)
+	{
+		if (navigator.onLine)
+		{
+			if (!this.loadLocal("Synced"))
+			{
+				this.SyncAll();
+			}
+			
+			return this.loadOnline(key);
+		}else{
+			return this.loadLocal(key);
+		}
+	}
+	
+	loadOnline(key)
+	{
+		var debug = this._debug
+		var returnResult;
+		chrome.storage.sync.get(['key'], function(result) {
+			if (debug)
+			{
+				console.log('Value '+key+' currently is ' + result.key);
+			}
+			returnResult = result.key;
+			console.log("in test: " + returnResult);
+		});
+		console.log("out test: " + returnResult);
+		return returnResult;
+	}
 
-function loadOnline(key)
-{
-	chrome.storage.sync.get(['key'], function(result) {
-        console.log('Value '+key+' currently is ' + result.key);
-    });
-}
 
+	loadLocal(key)
+	{
+		var debug = this._debug
+		var returnResult;
+		chrome.storage.local.get(['key'], function(result) {
+			if (debug)
+			{
+				console.log('Value '+key+' currently is ' + result.key);
+			}
+			returnResult = result.key;
+		});
+		return returnResult;
+	}
 
-function loadLocal(key)
-{
-	chrome.storage.local.get(['key'], function(result) {
-        console.log('Value '+key+' currently is ' + result.key);
-    });
-}
-
-function SyncAll()
-{
-	console.log('Sync all');
+	SyncAll()
+	{
+		console.log('Sync all');
+	}
+	
+	
 }
