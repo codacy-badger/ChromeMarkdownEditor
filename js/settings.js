@@ -1,32 +1,3 @@
-window.onload = function () {
-	document.getElementById('Test').addEventListener('click', TestSaveSync);
-}
-
-function TestSaveSync()
-{
-	var set = new Setting(false, true);
-	console.log("Test save sync!");
-	set.saveSetting("Test", "TestSave")
-	set.saveSetting("Test2", "TestSave2")
-
-
-	set.loadSetting("Test", function(value)
-	{
-		var textbox = document.getElementById('TextBox');
-		console.log("Loaded value: " + value);
-		var textNode = document.createTextNode(value);
-		textbox.appendChild(textNode);
-	});
-
-	set.loadSetting("Test2", function(value)
-	{
-		console.log("Loaded value 2: " + value);
-	});
-
-
-	console.log("Test save sync end!");
-}
-
 /**
  * This class is uses to load and save the settings either via sync or offline only
  */
