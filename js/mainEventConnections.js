@@ -1,21 +1,33 @@
 window.onload = function () {
     var testSettings = new Setting(true, false);
-    //testSettings.saveSetting("ModeSet", undefined);
-    var settingContainer = new settingsContainer();
+    //testSettings.saveSetting("ModeSet", false);
 
-    
-    if (settingContainer.modeSet() == false)
-    {
-        console.log( "Mode is not set!");
-        settingContainer.setOnline(true);
-        //if (confirm("Do you want to store your settings online?")) {
-          //
-        //}else
-        //{
-          //settingContainer.setOnline(false);
-        //}
-        settingContainer.save();
-    }
+    testSettings.loadSetting("ModeSet", function(value){
+      if (value === undefined || value === false)
+      {
+          BootstrapDialog.show({
+              title: 'Sync data via google sync',
+              message: 'Do you want to sync yout settings over your Chrome browsers?',
+              buttons: [{
+                  label: 'Yes',
+                  action: function(dialog) {
+                      testSettings.saveSetting("ModeSet", true);
+                      testSettings.saveSetting("OnlineMode", true);
+                      
+                      testSettings = new Setting(true, true);
+                      dialog.close();
+                  }
+              }, {
+                  label: 'No',
+                  action: function(dialog) {
+                      testSettings.saveSetting("ModeSet", true);
+                      testSettings.saveSetting("OnlineMode", false);
+                      dialog.close();
+                  }
+              }]
+          });
 
 
+      }
+    });
 }
