@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
   <script src="../js/jquery/jquery.js"></script>
 
   <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
@@ -11,16 +12,31 @@
 
 
   <script src="../js/mainEventConnections.js"></script>
-  <script src="../js/classes/datastructure/settingData.js"></script>
   <script src="../js/classes/settings.js"></script>
   <script src="../js/classes/filesystem/filesystem.js"></script>
   <script src="../js/classes/filesystem/localFilesystem.js"></script>
   <script src="../js/classes/filesystem/remoteFilesystem.js"></script>
 
-  </head>
-  <body>
-    <div>Hello, world!</div>
-	<button id="Test">Test</button>
-	<div id = "TextBox"></div>
-  </body>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <button class="btn btn-warning" id="settings">Settings</button>
+      </form>
+    </div>
+  </nav>
+  <div>Hello, world!</div>
+  <button id="Test">Test</button>
+  <div id="TextBox"></div>
+</body>
+
 </html>
